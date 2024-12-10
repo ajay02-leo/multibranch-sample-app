@@ -1,21 +1,27 @@
 pipeline {
-  agent {label 'linux'}
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
+  agent {label 'agent1'}
   stages {
     stage('Build') {
       steps {
-        sh './gradlew clean check --no-daemon'
+        sh 'echo build'
       }
     }
   }
-  post {
-    always {
-        junit(
-          allowEmptyResults: true, 
-          testResults: '**/build/test-results/test/*.xml'
-        )
-    }
-  }
+  post{
+                always {
+                    echo(message: 'This is test stage')
+                    
+                }
+                unsuccessful {
+                    echo(message: 'test stage is unsuccessfull')
+                    
+                }
+                success{
+                    echo(message: 'test stage is successfull')
+                }
+                failure{
+                    echo(message: 'test stage is failure')
+                }
+
+            }
 }
